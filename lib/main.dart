@@ -1,9 +1,11 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:f_web_retool_hive/data/datasources/local/i_local_data_source.dart';
 import 'package:f_web_retool_hive/data/models/user_db.dart';
 import 'package:f_web_retool_hive/ui/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
+import 'data/core/network_info.dart';
 import 'data/datasources/local/local_data_source.dart';
 import 'data/datasources/remote/i_user_datasource.dart';
 import 'data/datasources/remote/user_datasource.dart';
@@ -33,6 +35,9 @@ void main() {
   Get.put<IUserDataSource>(UserDataSource());
   Get.put<IUserRepository>(UserRepository(Get.find(), Get.find()));
   Get.put(UserUseCase(Get.find()));
+
+  Get.put(Connectivity());
+  Get.put(NetworkInfo(connectivity: Get.find()));
   Get.put(ConnectivityController());
   Get.put(UserController());
   runApp(const MyApp());
