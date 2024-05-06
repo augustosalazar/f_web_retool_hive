@@ -10,4 +10,8 @@ abstract class ILocalDataSource {
   Future<void> deleteEntry(User entry);
 
   Future<void> cacheUsers(List<User> users);
+
+  Future<List<User>> getOfflineUsers();
+
+  Future<void> clearOfflineUsers();
 }

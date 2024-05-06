@@ -17,10 +17,19 @@ class UserRepository implements IUserRepository {
   @override
   Future<List<User>> getUsers() async {
     if (await _networkInfo.isConnected()) {
+      // Get offline users and add them to the backend
+      final offLineUsers = await _localDataSource.getOfflineUsers();
+      for (var user in offLineUsers) {
+        await _userDatatasource.addUser(user);
+      }
+      _localDataSource.clearOfflineUsers();
+
+      // Get users from backend
       final users = await _userDatatasource.getUsers();
       await _localDataSource.cacheUsers(users);
       return users;
     }
+    // Get offline users
     return await _localDataSource.getUsers();
   }
 

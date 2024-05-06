@@ -46,4 +46,21 @@ class LocalDataSource implements ILocalDataSource {
           email: user.email));
     }
   }
+
+  @override
+  Future<List<User>> getOfflineUsers() async {
+    return Hive.box('userDbOffline')
+        .values
+        .map((entry) => User(
+            id: entry.key,
+            firstName: entry.name,
+            lastName: entry.lastName,
+            email: entry.email))
+        .toList();
+  }
+
+  @override
+  Future<void> clearOfflineUsers() async {
+    Hive.box('userDbOffline').clear();
+  }
 }
