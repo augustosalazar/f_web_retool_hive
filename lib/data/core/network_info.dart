@@ -1,32 +1,43 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:loggy/loggy.dart';
 
-abstract class NetworkInfoI {
-  Future<bool> isConnected();
-  Future<List<ConnectivityResult>> get connectivityResult;
-  Stream<List<ConnectivityResult>> get onConnectivityChanged;
-}
+class NetworkInfo with UiLoggy {
+  late StreamSubscription<InternetStatus> _internetStatusSubscription;
+  late StreamController<bool> _controller;
 
-class NetworkInfo implements NetworkInfoI {
-  final Connectivity connectivity;
-  NetworkInfo({required this.connectivity});
+  Stream<bool> get stream => _controller.stream;
 
-  @override
+  NetworkInfo() {
+    _controller = StreamController<bool>.broadcast();
+  }
+
+  void openStream() {
+    _internetStatusSubscription = InternetConnection()
+        .onStatusChange
+        .listen(_internetStatusSubscriptionListener);
+  }
+
+  void closeStream() {
+    _internetStatusSubscription.cancel();
+  }
+
+  void _addValue(bool value) {
+    _controller.add(value);
+  }
+
+  void dispose() {
+    _controller.close();
+  }
+
   Future<bool> isConnected() async {
-    final result = await connectivity.checkConnectivity();
-    for (var item in result) {
-      if (item != ConnectivityResult.none) {
-        return true;
-      }
-    }
-    return false;
+    return await InternetConnection().hasInternetAccess;
   }
 
-  @override
-  Future<List<ConnectivityResult>> get connectivityResult async {
-    return connectivity.checkConnectivity();
+  void _internetStatusSubscriptionListener(InternetStatus status) {
+    _addValue(status == InternetStatus.connected);
   }
-
-  @override
-  Stream<List<ConnectivityResult>> get onConnectivityChanged =>
-      connectivity.onConnectivityChanged;
 }

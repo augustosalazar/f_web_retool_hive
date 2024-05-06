@@ -6,16 +6,7 @@ import 'i_local_data_source.dart';
 
 class LocalDataSource implements ILocalDataSource {
   @override
-  Future<void> addEntry(User entry) async {
-    logInfo("Adding entry to db");
-    Hive.box('userDb').add(UserDb(
-        firstName: entry.firstName,
-        lastName: entry.lastName,
-        email: entry.email));
-  }
-
-  @override
-  Future<List<User>> getAll() async {
+  Future<List<User>> getUsers() async {
     return Hive.box('userDb')
         .values
         .map((entry) => User(
@@ -34,5 +25,25 @@ class LocalDataSource implements ILocalDataSource {
   @override
   Future<void> deleteEntry(User entry) async {
     await Hive.box('userDb').delete(entry.id);
+  }
+
+  @override
+  Future<void> addOfflineUser(User entry) async {
+    logInfo("Adding addOfflineUser");
+    Hive.box('userDbOffline').add(UserDb(
+        firstName: entry.firstName,
+        lastName: entry.lastName,
+        email: entry.email));
+  }
+
+  @override
+  Future<void> cacheUsers(List<User> users) async {
+    Hive.box('userDb').clear();
+    for (var user in users) {
+      await Hive.box('userDb').add(UserDb(
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email));
+    }
   }
 }

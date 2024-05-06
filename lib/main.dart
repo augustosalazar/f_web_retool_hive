@@ -1,7 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:f_web_retool_hive/data/datasources/local/i_local_data_source.dart';
 import 'package:f_web_retool_hive/data/models/user_db.dart';
-import 'package:f_web_retool_hive/ui/controller/home_controller.dart';
+import 'package:f_web_retool_hive/ui/controller/connectivity_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
@@ -21,6 +21,7 @@ Future<List<Box>> _openBox() async {
   await Hive.initFlutter();
   Hive.registerAdapter(UserDbAdapter());
   boxList.add(await Hive.openBox('userDb'));
+  boxList.add(await Hive.openBox('userDbOffline'));
   return boxList;
 }
 
@@ -30,14 +31,13 @@ void main() {
       showColors: true,
     ),
   );
-
+  _openBox();
+  Get.put(NetworkInfo());
   Get.put<ILocalDataSource>(LocalDataSource());
   Get.put<IUserDataSource>(UserDataSource());
-  Get.put<IUserRepository>(UserRepository(Get.find(), Get.find()));
+  Get.put<IUserRepository>(UserRepository(Get.find(), Get.find(), Get.find()));
   Get.put(UserUseCase(Get.find()));
 
-  Get.put(Connectivity());
-  Get.put(NetworkInfo(connectivity: Get.find()));
   Get.put(ConnectivityController());
   Get.put(UserController());
   runApp(const MyApp());

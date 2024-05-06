@@ -1,3 +1,4 @@
+import 'package:f_web_retool_hive/ui/controller/connectivity_controller.dart';
 import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
 
@@ -7,6 +8,7 @@ import '../../domain/use_case/user_usecase.dart';
 class UserController extends GetxController {
   final RxList<User> _users = <User>[].obs;
   final UserUseCase userUseCase = Get.find();
+  final ConnectivityController connectivity = Get.find();
 
   List<User> get users => _users;
 

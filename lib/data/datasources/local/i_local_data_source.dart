@@ -1,11 +1,13 @@
 import '../../../domain/entities/user.dart';
 
 abstract class ILocalDataSource {
-  Future<void> addEntry(User entry);
+  Future<void> addOfflineUser(User entry);
 
-  Future<List<User>> getAll();
+  Future<List<User>> getUsers();
 
   Future<void> deleteAll();
 
   Future<void> deleteEntry(User entry);
+
+  Future<void> cacheUsers(List<User> users);
 }
