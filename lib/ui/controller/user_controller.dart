@@ -40,4 +40,10 @@ class UserController extends GetxController {
     await userUseCase.deleteUser(id);
     getUsers();
   }
+
+  Future<void> deleteUsers() async {
+    logInfo("deleteUsers");
+    await userUseCase.deleteUsers();
+    getUsers();
+  }
 }

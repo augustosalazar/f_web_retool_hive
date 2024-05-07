@@ -15,23 +15,29 @@ import 'domain/use_case/user_usecase.dart';
 import 'ui/controller/user_controller.dart';
 import 'ui/my_app.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
 Future<List<Box>> _openBox() async {
+  final directory = await getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
   List<Box> boxList = [];
   await Hive.initFlutter();
   Hive.registerAdapter(UserDbAdapter());
   boxList.add(await Hive.openBox('userDb'));
   boxList.add(await Hive.openBox('userDbOffline'));
+  logInfo("Box opened userDb ${await Hive.boxExists('userDb')}");
+  logInfo("Box opened userDbOffline ${await Hive.boxExists('userDbOffline')}");
   return boxList;
 }
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Loggy.initLoggy(
     logPrinter: const PrettyPrinter(
       showColors: true,
     ),
   );
-  _openBox();
+  await _openBox();
   Get.put(NetworkInfo());
   Get.put<ILocalDataSource>(LocalDataSource());
   Get.put<IUserDataSource>(UserDataSource());

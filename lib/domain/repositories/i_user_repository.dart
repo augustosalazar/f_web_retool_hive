@@ -9,4 +9,6 @@ abstract class IUserRepository {
   Future<bool> updateUser(User user);
 
   Future<bool> deleteUser(int id);
+
+  Future<void> deleteUsers();
 }

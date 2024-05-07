@@ -18,8 +18,9 @@ class LocalDataSource implements ILocalDataSource {
   }
 
   @override
-  Future<void> deleteAll() async {
+  Future<void> deleteUsers() async {
     await Hive.box('userDb').clear();
+    await Hive.box('userDbOffline').clear();
   }
 
   @override

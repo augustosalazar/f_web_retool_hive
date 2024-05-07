@@ -5,7 +5,7 @@ abstract class ILocalDataSource {
 
   Future<List<User>> getCachedUsers();
 
-  Future<void> deleteAll();
+  Future<void> deleteUsers();
 
   Future<void> deleteEntry(User entry);
 

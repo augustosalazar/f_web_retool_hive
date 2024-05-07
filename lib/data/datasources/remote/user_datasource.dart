@@ -92,4 +92,13 @@ class UserDataSource implements IUserDataSource {
       return Future.value(false);
     }
   }
+
+  @override
+  Future<bool> deleteUsers() async {
+    List<User> users = await getUsers();
+    for (var user in users) {
+      await deleteUser(user.id!);
+    }
+    return Future.value(true);
+  }
 }

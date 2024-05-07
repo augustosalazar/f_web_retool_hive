@@ -8,4 +8,6 @@ abstract class IUserDataSource {
   Future<bool> updateUser(User user);
 
   Future<bool> deleteUser(int id);
+
+  Future<bool> deleteUsers();
 }

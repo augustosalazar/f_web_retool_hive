@@ -18,14 +18,16 @@ class UserRepository implements IUserRepository {
   @override
   Future<List<User>> getUsers() async {
     if (await _networkInfo.isConnected()) {
+      logInfo("getUsers online");
       // Get offline users and add them to the backend
       final offLineUsers = await _localDataSource.getOfflineUsers();
-      logInfo("getUsers Offline users: ${offLineUsers.length}");
-      for (var user in offLineUsers) {
-        await _userDatatasource.addUser(user);
+      if (offLineUsers.isNotEmpty) {
+        logInfo("getUsers found ${offLineUsers.length} offline users");
+        for (var user in offLineUsers) {
+          await _userDatatasource.addUser(user);
+        }
+        _localDataSource.clearOfflineUsers();
       }
-      _localDataSource.clearOfflineUsers();
-
       // Get users from backend
       final users = await _userDatatasource.getUsers();
       logInfo("getUsers online users: ${users.length}");
@@ -33,7 +35,9 @@ class UserRepository implements IUserRepository {
       return users;
     }
     // Get offline users
-    return await _localDataSource.getCachedUsers();
+    logInfo("getUsers offline");
+    return await _localDataSource.getCachedUsers() +
+        await _localDataSource.getOfflineUsers();
   }
 
   @override
@@ -64,5 +68,13 @@ class UserRepository implements IUserRepository {
       return false;
     }
     return true;
+  }
+
+  @override
+  Future<void> deleteUsers() async {
+    await _localDataSource.deleteUsers();
+    if (await _networkInfo.isConnected()) {
+      await _userDatatasource.deleteUsers();
+    }
   }
 }
