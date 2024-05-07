@@ -1,4 +1,4 @@
-import '../../data/datasources/remote/i_user_datasource.dart';
+import '../../data/datasources/remote/i_remote_user_source.dart';
 import '../entities/user.dart';
 
 abstract class IUserRepository {

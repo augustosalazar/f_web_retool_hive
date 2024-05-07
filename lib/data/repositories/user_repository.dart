@@ -1,14 +1,14 @@
 import 'package:f_web_retool_hive/data/datasources/local/i_local_data_source.dart';
 import 'package:loggy/loggy.dart';
 
-import '../../data/datasources/remote/user_datasource.dart';
+import '../datasources/remote/remote_user_source.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/i_user_repository.dart';
 import '../core/network_info.dart';
-import '../datasources/remote/i_user_datasource.dart';
+import '../datasources/remote/i_remote_user_source.dart';
 
 class UserRepository implements IUserRepository {
-  final IUserDataSource _userDatatasource;
+  final IRemoteUserSource _userDatatasource;
   final ILocalDataSource _localDataSource;
   final NetworkInfo _networkInfo;
 
@@ -24,9 +24,13 @@ class UserRepository implements IUserRepository {
       if (offLineUsers.isNotEmpty) {
         logInfo("getUsers found ${offLineUsers.length} offline users");
         for (var user in offLineUsers) {
-          await _userDatatasource.addUser(user);
+          var rta = await _userDatatasource.addUser(user);
+          if (rta) {
+            await _localDataSource.deleteOfflineEntry(user);
+          } else {
+            logError("getUsers error adding offline user");
+          }
         }
-        _localDataSource.clearOfflineUsers();
       }
       // Get users from backend
       final users = await _userDatatasource.getUsers();

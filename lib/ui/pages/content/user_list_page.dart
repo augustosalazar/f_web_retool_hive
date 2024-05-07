@@ -1,3 +1,4 @@
+import 'package:f_web_retool_hive/ui/controller/connectivity_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
@@ -17,16 +18,28 @@ class UserListPage extends StatefulWidget {
 
 class _UserListPageState extends State<UserListPage> {
   UserController userController = Get.find();
+  ConnectivityController connectivityController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Welcome"),
+        title: const Text("Web with Hive and GetX"),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () async {
+              if (connectivityController.connection) {
+                await userController.deleteUsers();
+              } else {
+                Get.defaultDialog(
+                    title: "Warning",
+                    middleText: "This action can not be done offline",
+                    textConfirm: "Ok",
+                    onConfirm: () {
+                      Get.back();
+                    });
+              }
               await userController.deleteUsers();
             },
           ),

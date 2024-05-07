@@ -3,13 +3,14 @@ import 'package:loggy/loggy.dart';
 import '../../../domain/entities/user.dart';
 import 'package:http/http.dart' as http;
 
-import 'i_user_datasource.dart';
+import 'i_remote_user_source.dart';
 
-class UserDataSource implements IUserDataSource {
+class RemoteUserSource implements IRemoteUserSource {
   final http.Client httpClient;
   final String apiKey = 'qtDGZS';
 
-  UserDataSource({http.Client? client}) : httpClient = client ?? http.Client();
+  RemoteUserSource({http.Client? client})
+      : httpClient = client ?? http.Client();
 
   @override
   Future<List<User>> getUsers() async {
@@ -52,6 +53,7 @@ class UserDataSource implements IUserDataSource {
       return Future.value(true);
     } else {
       logError("Got error code ${response.statusCode}");
+      logError(response.body);
       return Future.value(false);
     }
   }

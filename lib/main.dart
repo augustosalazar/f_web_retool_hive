@@ -7,8 +7,8 @@ import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
 import 'data/core/network_info.dart';
 import 'data/datasources/local/local_data_source.dart';
-import 'data/datasources/remote/i_user_datasource.dart';
-import 'data/datasources/remote/user_datasource.dart';
+import 'data/datasources/remote/i_remote_user_source.dart';
+import 'data/datasources/remote/remote_user_source.dart';
 import 'data/repositories/user_repository.dart';
 import 'domain/repositories/i_user_repository.dart';
 import 'domain/use_case/user_usecase.dart';
@@ -40,7 +40,7 @@ void main() async {
   await _openBox();
   Get.put(NetworkInfo());
   Get.put<ILocalDataSource>(LocalDataSource());
-  Get.put<IUserDataSource>(UserDataSource());
+  Get.put<IRemoteUserSource>(RemoteUserSource());
   Get.put<IUserRepository>(UserRepository(Get.find(), Get.find(), Get.find()));
   Get.put(UserUseCase(Get.find()));
 

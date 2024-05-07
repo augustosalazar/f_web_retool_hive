@@ -1,6 +1,6 @@
 import '../../../domain/entities/user.dart';
 
-abstract class IUserDataSource {
+abstract class IRemoteUserSource {
   Future<List<User>> getUsers();
 
   Future<bool> addUser(User user);
