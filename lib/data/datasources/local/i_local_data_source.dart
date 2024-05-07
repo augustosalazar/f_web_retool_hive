@@ -3,7 +3,7 @@ import '../../../domain/entities/user.dart';
 abstract class ILocalDataSource {
   Future<void> addOfflineUser(User entry);
 
-  Future<List<User>> getUsers();
+  Future<List<User>> getCachedUsers();
 
   Future<void> deleteAll();
 

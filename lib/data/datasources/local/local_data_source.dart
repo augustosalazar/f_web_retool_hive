@@ -6,12 +6,12 @@ import 'i_local_data_source.dart';
 
 class LocalDataSource implements ILocalDataSource {
   @override
-  Future<List<User>> getUsers() async {
+  Future<List<User>> getCachedUsers() async {
     return Hive.box('userDb')
         .values
         .map((entry) => User(
             id: entry.key,
-            firstName: entry.name,
+            firstName: entry.firstName,
             lastName: entry.lastName,
             email: entry.email))
         .toList();
@@ -53,7 +53,7 @@ class LocalDataSource implements ILocalDataSource {
         .values
         .map((entry) => User(
             id: entry.key,
-            firstName: entry.name,
+            firstName: entry.firstName,
             lastName: entry.lastName,
             email: entry.email))
         .toList();

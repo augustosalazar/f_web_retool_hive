@@ -1,4 +1,5 @@
 import 'package:f_web_retool_hive/data/datasources/local/i_local_data_source.dart';
+import 'package:loggy/loggy.dart';
 
 import '../../data/datasources/remote/user_datasource.dart';
 import '../../domain/entities/user.dart';
@@ -19,6 +20,7 @@ class UserRepository implements IUserRepository {
     if (await _networkInfo.isConnected()) {
       // Get offline users and add them to the backend
       final offLineUsers = await _localDataSource.getOfflineUsers();
+      logInfo("getUsers Offline users: ${offLineUsers.length}");
       for (var user in offLineUsers) {
         await _userDatatasource.addUser(user);
       }
@@ -26,11 +28,12 @@ class UserRepository implements IUserRepository {
 
       // Get users from backend
       final users = await _userDatatasource.getUsers();
+      logInfo("getUsers online users: ${users.length}");
       await _localDataSource.cacheUsers(users);
       return users;
     }
     // Get offline users
-    return await _localDataSource.getUsers();
+    return await _localDataSource.getCachedUsers();
   }
 
   @override
