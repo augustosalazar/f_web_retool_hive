@@ -87,8 +87,18 @@ class _UserListPageState extends State<UserListPage> {
                   title: Text(user.name),
                   subtitle: Text(user.email),
                   onTap: () {
-                    Get.to(() => const EditUserPage(),
-                        arguments: [user, user.id]);
+                    if (connectivityController.connection) {
+                      Get.to(() => const EditUserPage(),
+                          arguments: [user, user.id]);
+                    } else {
+                      Get.defaultDialog(
+                          title: "Warning",
+                          middleText: "This action can not be done offline",
+                          textConfirm: "Ok",
+                          onConfirm: () {
+                            Get.back();
+                          });
+                    }
                   },
                 ),
               ),
