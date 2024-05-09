@@ -23,7 +23,7 @@ class User {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id ?? 0,
+        //"id": id ?? 0, // id is not required when adding a new user
         "firstName": firstName,
         "lastName": lastName,
         "email": email,
