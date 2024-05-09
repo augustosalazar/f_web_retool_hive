@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:f_web_retool_hive/data/datasources/local/i_local_data_source.dart';
 import 'package:f_web_retool_hive/data/models/user_db.dart';
 import 'package:f_web_retool_hive/ui/controller/connectivity_controller.dart';

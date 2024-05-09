@@ -1,7 +1,5 @@
 import 'package:f_web_retool_hive/data/datasources/local/i_local_data_source.dart';
 import 'package:loggy/loggy.dart';
-
-import '../datasources/remote/remote_user_source.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/i_user_repository.dart';
 import '../core/network_info.dart';

@@ -146,7 +146,7 @@ packages:
     source: hosted
     version: "1.18.0"
   connectivity_plus:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: connectivity_plus
       sha256: db7a4e143dc72cc3cb2044ef9b052a7ebfe729513e6a82943bc3526f784365b8
@@ -481,7 +481,7 @@ packages:
     source: hosted
     version: "1.9.0"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       sha256: c9e7d3a4cd1410877472158bee69963a4579f78b68c65a2b7d40d1a7a88bb161
